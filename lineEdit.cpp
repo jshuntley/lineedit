@@ -147,7 +147,8 @@ namespace
                 std::getline(std::cin, ans);
 
                 if (ans.empty() || (ans[0] == 'N') || (ans[0] == 'n'))
-                    getPath();
+                    std::cout << "Cancelled.\n";
+                return {};
             }
 
             file.close();
@@ -612,26 +613,28 @@ void LineEdit::loop(void)
         {
             if (dirty_)
             {
-                std::cout << "File modified. Save changes? [y/N] Cancel [c] ";
+                std::cout << "File modified. (W)rite changes and exit, (Q)uit without saving, or (C)ancel? ";
                 std::string ans;
                 std::getline(std::cin, ans);
 
-                if (!ans.empty() && (ans[0] == 'y' || ans[0] == 'Y'))
+                if (!ans.empty() && (ans[0] == 'W'))
                 {
                     if (filePath_.empty())
                         filePath_ = getPath();
-
-                    if (!filePath_.empty())
-                    {
-                        saveFile(filePath_);
-                    }
                     else
-                    {
-                        std::cout << "Canceled\n";
-                        continue;
-                    }
+                        saveFile(filePath_);
                 }
-                else if (!ans.empty() && (ans[0] != 'n' || ans[0] != 'N'))
+                else if (!ans.empty() && (ans[0] == 'Q'))
+                {
+                    std::cout << "Quitting!.\n";
+                    return;
+                }
+                else if (!ans.empty() && (ans[0] != 'W' || ans[0] != 'Q'))
+                {
+                    std::cout << "Cancelled.\n";
+                    continue;
+                }
+                else
                 {
                     std::cout << "Cancelled.\n";
                     continue;
